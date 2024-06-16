@@ -19,27 +19,19 @@ def gerar_pdf(nome_arquivo):
     paragrafo_titulo = Paragraph(titulo, estilo_titulo)
     elements.append(paragrafo_titulo)
     
-    informations = [
-        "CLIENTE: [NOME]",
-        "Tipo de contrato: [info]",
-        "Horas mensais: [info]",
-        "Valor mensal: [info]",
-        "Valor hora: [info]",
-        "Valor hora adicional: [info]"
-    ]
-    
-    for info in informations:
-        paragrafo_info = Paragraph(info, estilo_cabecalho)
-        elements.append(paragrafo_info)
-    
-    elements.append(Spacer(1, 12))
-
     # Função para criar tabelas
     def criar_tabela(dados, estilo=None):
         tabela = Table(dados)
         if estilo:
             tabela.setStyle(estilo)
         return tabela
+
+    # Cabeçalho do cliente.
+    dados_cliente = [['Cliente:', '[NOME]'], ['Horas Mensais:', '[HORAS]'], ['Valor mensal:', '[VALOR]'], ['Valor hora:', '[VALOR]]',], ['Valor hora adicional:', '[VALOR]]']]
+    estilo_cliente = TableStyle([('BACKGROUND', (0, 0), (-1, 0), colors.grey), ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke), ('ALIGN', (0, 0), (-1, -1), 'CENTER'), ('GRID', (0, 0), (-1, -1), 1, colors.black)])
+    
+    elements.append(criar_tabela(dados_cliente, estilo_cliente))
+    elements.append(Spacer(12, 12))
 
     # Primeira tabela
     dados_tabela_1 = [['Março'], ['Março', 'Quantidade'], ['Chamados', '40'], ['Horas utilizadas', '19.11']]
@@ -50,7 +42,7 @@ def gerar_pdf(nome_arquivo):
 
     # Segunda tabela - Dividida em duas
     dados_tabela_2_1 = [['Trimestre'], ['Mês', 'Janeiro', 'Fevereiro', 'Março', 'Tempo total'], ['Horas', '39.99', '17.6', '19,11', '76,70']]
-    dados_tabela_2_2 = [['Horas Contratadas', '90'], ['Horas utilizadas', '76.70', 'Saldo', '13,3', 'Valor hora adicional', 'R$99,00', 'Adicional de horas', 'R$0,00']]
+    dados_tabela_2_2 = [[], ['Horas Contratadas', '90'], ['Horas utilizadas', '76.70'], ['Saldo', '13,3'], ['Valor hora adicional', 'R$99,00'], ['Adicional de horas', 'R$0,00']]
     estilo_tabela_2 = TableStyle([('BACKGROUND', (0, 0), (-1, 0), colors.grey), ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke), ('ALIGN', (0, 0), (-1, -1), 'CENTER'), ('GRID', (0, 0), (-1, -1), 1, colors.black)])
     
     elements.append(criar_tabela(dados_tabela_2_1, estilo_tabela_2))
