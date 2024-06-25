@@ -116,7 +116,6 @@ def gerar_pdf(
     tabela_mes = criar_tabela(dados_tabela_1, estilo_tabela_1, largura_mes)
     tabela_mes.hAlign = 'LEFT'
     elements.append(tabela_mes)
-    elements.append(Spacer(1, 12))
 
     #Segunda tabela - Trimestre
     dados_tabela_2_1 = [
