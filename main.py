@@ -1,11 +1,20 @@
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
-from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, TableStyle, Spacer, Frame, PageTemplate
-from reportlab.lib.units import cm  # Importando a unidade de medida cm
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, TableStyle, Spacer
+from reportlab.lib.units import cm
+from datetime import datetime
+
+ #Função para criar tabelas
+def criar_tabela(dados, estilo=None, largura_colunas=None):
+    tabela = Table(dados, colWidths=largura_colunas)
+    if estilo:
+        tabela.setStyle(estilo)
+    return tabela
 
 def gerar_pdf(
         nome_arquivo: str,
+        ano = datetime.now().year,
         
         #Relacionado ao cliente.
         nome_cliente: str='',
@@ -38,8 +47,8 @@ def gerar_pdf(
         serviços_adicionais_ou_peças: int=0,
         valor_de_horas_adicionais_do_trimestre_anterior: int=0
         ) -> None:
-    
     """Uma função para gerar um arquivo PDF."""
+
     #Configuração do documento
     doc = SimpleDocTemplate(nome_arquivo, pagesize=A4)
     elements = []
@@ -47,19 +56,22 @@ def gerar_pdf(
     #Estilos de texto
     estilos = getSampleStyleSheet()
     estilo_titulo = estilos['Title']
+    estilo_texto_centralizado = ParagraphStyle(
+        'Centralizado',
+        parent=estilos['BodyText'],
+        alignment=1 #1 centraliza.
+        )
 
     #Título
     titulo = "Relatório de gerenciamento de chamados"
     paragrafo_titulo = Paragraph(titulo, estilo_titulo)
     elements.append(paragrafo_titulo)
-    elements.append(Spacer(1, 12))
-    
-    #Função para criar tabelas
-    def criar_tabela(dados, estilo=None, largura_colunas=None):
-        tabela = Table(dados, colWidths=largura_colunas)
-        if estilo:
-            tabela.setStyle(estilo)
-        return tabela
+
+    #Introdução.
+    texto = f'{mes} de {ano}'
+    paragrafo_texto = Paragraph(texto, estilo_texto_centralizado)
+    elements.append(paragrafo_texto)
+    elements.append(Spacer(1,12))
 
     #Cabeçalho/tabela do cliente
     dados_cliente = [
