@@ -18,6 +18,7 @@ def gerar_pdf(
         
         #Relacionado ao cliente.
         nome_cliente: str='',
+        tipo_de_contrato: str='',
         horas_mensais: int=0,
         horas_trimestrais: int=0,
         valor_mensal: int=0,
@@ -50,7 +51,7 @@ def gerar_pdf(
     """Uma função para gerar um arquivo PDF."""
 
     #Configuração do documento
-    doc = SimpleDocTemplate(nome_arquivo, pagesize=A4)
+    doc = SimpleDocTemplate(nome_arquivo, pagesize=A4, leftMargin=15, rightMargin=15, topMargin=30, bottomMargin=0)
     elements = []
     
     #Estilos de texto
@@ -76,6 +77,7 @@ def gerar_pdf(
     #Cabeçalho/tabela do cliente
     dados_cliente = [
         [f'Cliente: {nome_cliente}'],
+        ['Tipo de Contrato:', f'{tipo_de_contrato}'],
         ['Horas Mensais:', f'{horas_mensais} horas mensais, {horas_trimestrais} horas trimestrais.'],
         ['Valor mensal:', f'R${valor_mensal}'],
         ['Valor hora:', f'R${valor_hora}'],
@@ -86,10 +88,12 @@ def gerar_pdf(
         ('BACKGROUND', (0, 0), (-1, 0), colors.blue),
         ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
         ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
-        ('GRID', (0, 0), (-1, -1), 1, colors.white)
+        ('GRID', (0, 0), (-1, -1), 1, colors.white),
+        ('FONTNAME', (0, 0), (0, -1), 'Helvetica-Bold')
     ])
-    largura_cliente = [5 * cm, 13 * cm]  #Largura
+    largura_cliente = [5 * cm, 14. * cm]  #Largura
     tabela_cliente = criar_tabela(dados_cliente, estilo_cliente, largura_cliente)
+    tabela_cliente.hAlign = 'LEFT'
     elements.append(tabela_cliente)
     elements.append(Spacer(1, 12))
 
@@ -105,9 +109,10 @@ def gerar_pdf(
         ('BACKGROUND', (0, 0), (-1, 0), colors.blue),
         ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
         ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-        ('GRID', (0, 0), (-1, -1), 1, colors.black)
+        ('GRID', (0, 0), (-1, -1), 1, colors.black),
+        ('FONT', (0, 0), (-1, 1), 'Helvetica-Bold')
     ])
-    largura_mes = [4 * cm, 4 * cm]  # Ajustando a largura
+    largura_mes = [4 * cm, 4 * cm]
     tabela_mes = criar_tabela(dados_tabela_1, estilo_tabela_1, largura_mes)
     tabela_mes.hAlign = 'LEFT'
     elements.append(tabela_mes)
@@ -124,7 +129,8 @@ def gerar_pdf(
         ('BACKGROUND', (0, 0), (-1, 0), colors.blue),
         ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
         ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-        ('GRID', (0, 0), (-1, -1), 1, colors.black)
+        ('GRID', (0, 0), (-1, -1), 1, colors.black),
+        ('FONT', (0, 0), (-1, 1), 'Helvetica-Bold')
     ])
     largura_trimestre_1 = [1.5 * cm, 2 * cm, 2 * cm, 2 * cm, 3 * cm]
     tabela_trimestre_1 = criar_tabela(dados_tabela_2_1, estilo_tabela_2_1, largura_trimestre_1)
@@ -142,7 +148,8 @@ def gerar_pdf(
     estilo_tabela_2_2 = TableStyle([
         ('TEXTCOLOR', (0, 0), (-1, 0), colors.black),
         ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-        ('GRID', (0, 0), (-1, -1), 1, colors.black)
+        ('GRID', (0, 0), (-1, -1), 1, colors.black),
+        ('FONT', (0, 2), (-1, 2), 'Helvetica-Bold'),
     ])
     largura_trimestre_2 = [5 * cm, 5 * cm]  # Ajustando a largura
     tabela_trimestre_2 = criar_tabela(dados_tabela_2_2, estilo_tabela_2_2, largura_trimestre_2)
@@ -163,7 +170,8 @@ def gerar_pdf(
         ('BACKGROUND', (0, 0), (-1, 0), colors.blue),
         ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
         ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-        ('GRID', (0, 0), (-1, -1), 1, colors.black)
+        ('GRID', (0, 0), (-1, -1), 1, colors.black),
+        ('FONT', (0, 4), (-1, 5), 'Helvetica-Bold')
     ])
     largura_faturamento = [8 * cm]  # Ajustando a largura para ficar centralizado
     tabela_faturamento = criar_tabela(dados_tabela_3, estilo_tabela_3, largura_faturamento)
@@ -174,28 +182,29 @@ def gerar_pdf(
 
 #Exemplo de chamada da função com parâmetros fictícios
 gerar_pdf(
-    nome_arquivo='relatorio.pdf',
-    nome_cliente='Cliente XYZ',
-    horas_mensais=120,
-    horas_trimestrais=360,
-    valor_mensal=1000,
-    valor_hora=50,
-    valor_hora_adicional_cliente=75,
-    mes='Janeiro',
-    chamados=10,
-    horas_utilizadas_mes=100,
-    mes_1='Janeiro',
-    horas_mes_1=100,
-    mes_2='Fevereiro',
-    horas_mes_2=110,
-    mes_3='Março',
-    horas_mes_3=120,
-    horas_contratadas=360,
-    horas_utilizadas_trimestre=330,
-    saldo=30,
-    valor_hora_adicional_trimestre=80,
-    adicional_de_horas_trimestre=1600,
-    valor_mensal_faturamento=1000,
-    serviços_adicionais_ou_peças=200,
-    valor_de_horas_adicionais_do_trimestre_anterior=300
+    nome_arquivo = 'relatorio.pdf',
+    nome_cliente = 'Cliente XYZ',
+    tipo_de_contrato = 'Contrato PCH',
+    horas_mensais = 120,
+    horas_trimestrais = 360,
+    valor_mensal = 1000,
+    valor_hora = 50,
+    valor_hora_adicional_cliente = 75,
+    mes = 'Janeiro',
+    chamados = 10,
+    horas_utilizadas_mes = 100,
+    mes_1 = 'Janeiro',
+    horas_mes_1 = 100,
+    mes_2 = 'Fevereiro',
+    horas_mes_2 = 110,
+    mes_3 = 'Março',
+    horas_mes_3 = 120,
+    horas_contratadas = 360,
+    horas_utilizadas_trimestre = 330,
+    saldo = 30,
+    valor_hora_adicional_trimestre = 80,
+    adicional_de_horas_trimestre = 1600,
+    valor_mensal_faturamento = 1000,
+    serviços_adicionais_ou_peças = 200,
+    valor_de_horas_adicionais_do_trimestre_anterior = 300
 )
