@@ -1,4 +1,4 @@
-from reportlab.lib.pagesizes import A4
+from reportlab.lib.pagesizes import A3
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, TableStyle, Spacer
@@ -51,7 +51,7 @@ def gerar_pdf(
     """Uma função para gerar um arquivo PDF."""
 
     # Configuração do documento
-    doc = SimpleDocTemplate(nome_arquivo, pagesize=A4, leftMargin=15, rightMargin=15, topMargin=30, bottomMargin=0)
+    doc = SimpleDocTemplate(nome_arquivo, pagesize=A3)
     elements = []
     
     # Estilos de texto
@@ -68,7 +68,6 @@ def gerar_pdf(
     titulo = "Relatório de gerenciamento de chamados"
     paragrafo_titulo = Paragraph(titulo, estilo_titulo)
     elements.append(paragrafo_titulo)
-    elements.append(Spacer(1, 12))
 
     # Introdução
     texto = f'{mes} de {ano}'
@@ -78,22 +77,21 @@ def gerar_pdf(
 
     # Cabeçalho/tabela do cliente
     dados_cliente = [
-        [Paragraph(f'Cliente: {nome_cliente}', estilo_normal)],
-        ['Tipo de Contrato:', Paragraph(f'{tipo_de_contrato}', estilo_normal)],
-        ['Horas Mensais:', Paragraph(f'{horas_mensais} horas mensais, {horas_trimestrais} horas trimestrais.', estilo_normal)],
-        ['Valor mensal:', Paragraph(f'R${valor_mensal}', estilo_normal)],
-        ['Valor hora:', Paragraph(f'R${valor_hora}', estilo_normal)],
-        ['Valor hora adicional:', Paragraph(f'R${valor_hora_adicional_cliente}', estilo_normal)]
+    [Paragraph(f'Cliente: {nome_cliente}', estilo_normal)],
+    ['Tipo de Contrato:', Paragraph(f'{tipo_de_contrato}', estilo_normal)],
+    ['Horas Mensais:', Paragraph(f'{horas_mensais} horas mensais, {horas_trimestrais} horas trimestrais.', estilo_normal)],
+    ['Valor mensal:', Paragraph(f'R${valor_mensal}', estilo_normal)],
+    ['Valor hora:', Paragraph(f'R${valor_hora}', estilo_normal)],
+    ['Valor hora adicional:', Paragraph(f'R${valor_hora_adicional_cliente}', estilo_normal)]
     ]
     estilo_cliente = TableStyle([
         ('SPAN', (0, 0), (-1, 0)),
         ('BACKGROUND', (0, 0), (-1, 0), colors.blue),
-        ('TEXTCOLOR', (0, 0), (0, 0), colors.whitesmoke),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),  # Define a cor do texto da primeira linha como branca
         ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
         ('GRID', (0, 0), (-1, -1), 1, colors.white),
-        ('FONTNAME', (0, 0), (0, -1), 'Helvetica-Bold')
     ])
-    largura_cliente = [5 * cm, 14. * cm]  # Largura
+    largura_cliente = [5 * cm, 22 * cm]  # Largura
     tabela_cliente = criar_tabela(dados_cliente, estilo_cliente, largura_cliente)
     tabela_cliente.hAlign = 'LEFT'
 
@@ -109,12 +107,10 @@ def gerar_pdf(
         ('BACKGROUND', (0, 0), (-1, 0), colors.blue),
         ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
         ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-        ('GRID', (0, 0), (-1, -1), 1, colors.black),
-        ('FONT', (0, 0), (-1, 1), 'Helvetica-Bold')
+        ('GRID', (0, 0), (-1, -1), 1, colors.black)
     ])
-    largura_mes = [4 * cm, 4 * cm]
+    largura_mes = [6.7 * cm, 6.7 * cm]
     tabela_mes = criar_tabela(dados_tabela_mes, estilo_tabela_mes, largura_mes)
-    tabela_mes.hAlign = 'LEFT'
 
     # Segunda tabela - Trimestre
     dados_tabela_trimestre_1 = [
@@ -130,7 +126,7 @@ def gerar_pdf(
         ('GRID', (0, 0), (-1, -1), 1, colors.black),
         ('FONT', (0, 0), (-1, 1), 'Helvetica-Bold')
     ])
-    largura_trimestre_1 = [1.5 * cm, 2 * cm, 2 * cm, 2 * cm, 3 * cm]
+    largura_trimestre_1 = [1.9 * cm, 2.4 * cm, 2.4 * cm, 2.4 * cm, 3.4 * cm]
     tabela_trimestre_1 = criar_tabela(dados_tabela_trimestre_1, estilo_tabela_trimestre_1, largura_trimestre_1)
 
     dados_tabela_trimestre_2 = [
@@ -158,11 +154,10 @@ def gerar_pdf(
     estilo_template = TableStyle([
         ('SPAN', (0, 0), (-1, 0)),
         ('BACKGROUND', (0, 0), (-1, 0), colors.white),
-        ('TEXTCOLOR', (0, 0), (-1, 0), colors.black),
-        ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
-        ('GRID', (0, 0), (-1, -1), 1, colors.black),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('GRID', (0, 0), (-1, -1), 1, colors.white),
     ])
-    largura_template = [10 * cm, 10 * cm]  # Largura
+    largura_template = [14 * cm, 14 * cm]
     tabela_template = criar_tabela(dados_template, estilo_template, largura_template)
     elements.append(tabela_template)
     elements.append(Spacer(1, 12))
@@ -183,7 +178,7 @@ def gerar_pdf(
         ('GRID', (0, 0), (-1, -1), 1, colors.black),
         ('FONT', (0, 4), (-1, 5), 'Helvetica-Bold')
     ])
-    largura_faturamento = [8 * cm]  # Ajustando a largura para ficar centralizado
+    largura_faturamento = [12 * cm]  # Ajustando a largura para ficar centralizado
     tabela_faturamento = criar_tabela(dados_tabela_faturamento, estilo_tabela_faturamento, largura_faturamento)
     elements.append(tabela_faturamento)
 
